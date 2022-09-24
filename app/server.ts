@@ -5,6 +5,7 @@ import * as routes from './routes';
 import cors from 'cors';
 import morgan from 'morgan';
 import environment from './config/environment';
+import db from './db/models';
 dotenv.config();
 
 const PORT: number = environment.port ? +environment.port : 5000;
@@ -25,8 +26,10 @@ export class Server {
       })
     );
     this.app.use(morgan('combined'));
-    this.app.listen(PORT, () => {
-      winston.log('info', `--> Server successfully started at port ${PORT}'`);
+    db.sequelize.sync().then(() => {
+      this.app.listen(PORT, () => {
+        winston.log('info', `--> Server successfully started at port ${PORT}'`);
+      });
     });
 
     routes.initRoutes(this.app);

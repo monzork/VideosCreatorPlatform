@@ -9,8 +9,9 @@ services:
     container_name: demo_postgres
     image: "postgres:12"
     environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "password"
+      POSTGRES_USER: "${DB_USER}"
+      POSTGRES_DB: "${DB_NAME}"
+      POSTGRES_PASSWORD: "${DB_PASS:-password}"
       PGDATA: "/data/postgres"
     volumes:
        - postgres:/data/postgres
