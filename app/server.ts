@@ -1,6 +1,8 @@
 import express, { Express, urlencoded } from 'express';
 import dotenv from 'dotenv';
-import * as winston from 'winston';
+import logger from './logger';
+import swaggerUi from 'swagger-ui-express';
+import bodyParser = require('body-parser');
 import * as routes from './routes';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -26,9 +28,27 @@ export class Server {
       })
     );
     this.app.use(morgan('combined'));
+    this.app.use(
+      bodyParser.urlencoded({
+        extended: true
+      })
+    );
+
+    this.app.use(bodyParser.json());
+
+    this.app.use(
+      '/docs',
+      swaggerUi.serve,
+      swaggerUi.setup(undefined, {
+        swaggerOptions: {
+          url: '/swagger.json'
+        }
+      })
+    );
+
     db.sequelize.sync().then(() => {
       this.app.listen(PORT, () => {
-        winston.log('info', `--> Server successfully started at port ${PORT}'`);
+        logger.log('info', `--> Server successfully started at port ${PORT}'`);
       });
     });
 
