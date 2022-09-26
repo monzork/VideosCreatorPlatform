@@ -4,14 +4,13 @@ import {
   Controller,
   Query,
   Post,
-  Put,
   Body,
   SuccessResponse
 } from 'tsoa';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { UserDTO } from '../db/models/user';
-import db from '../db/models/index';
+import { UserDTO } from '../models/modelss/user';
+// import db from '../models/modelss/index';
 
 interface sigIn {
   name: string;
@@ -22,34 +21,34 @@ interface sigIn {
 export class UserController extends Controller {
   @Get('{id}')
   public async read(id: number): Promise<UserDTO> {
-    return await db.User.findByPk(id);
+    return { email: '', id: '', name: '', password: '', photo: '', type: '' };
   }
 
-  @Get()
-  public async readAll(@Query() search?: string): Promise<UserDTO[]> {
-    return await db.User.findAll();
-  }
+  // @Get()
+  // public async readAll(@Query() search?: string): Promise<UserDTO[]> {
+  //   return await db.User.findAll();
+  // }
 
-  @SuccessResponse('201', 'Created')
-  @Post()
-  public async create(@Body() user: UserDTO): Promise<UserDTO> {
-    user.password = bcrypt.hashSync(user.password, 3);
-    return await db.User.create(user);
-  }
+  // @SuccessResponse('201', 'Created')
+  // @Post()
+  // public async create(@Body() user: UserDTO): Promise<UserDTO> {
+  //   user.password = bcrypt.hashSync(user.password, 3);
+  //   return await db.User.create(user);
+  // }
 
-  @SuccessResponse(200, 'Sign In')
-  async sigIn(userSigIn: sigIn) {
-    const { dataValues: userFound } = await db.User.findOne({
-      where: {
-        name: userSigIn.name
-      }
-    });
+  // @SuccessResponse(200, 'Sign In')
+  // async sigIn(userSigIn: sigIn) {
+  //   const { dataValues: userFound } = await db.User.findOne({
+  //     where: {
+  //       name: userSigIn.name
+  //     }
+  //   });
 
-    if (bcrypt.compareSync(userSigIn.password, userFound.password)) {
-      const secret = process.env.SECRET as string;
-      return { token: jwt.sign(userFound, secret) };
-    }
-  }
+  //   if (bcrypt.compareSync(userSigIn.password, userFound.password)) {
+  //     const secret = process.env.SECRET as string;
+  //     return { token: jwt.sign(userFound, secret) };
+  //   }
+  // }
   // read(req: Request, res: Response) {
   //   db.User.findById(req.params.id)
   //     .then((user: UserAttributes | null) => {

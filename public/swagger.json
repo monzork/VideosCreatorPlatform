@@ -6,8 +6,14 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"UserAttributes": {
+			"UserDTO": {
 				"properties": {
+					"photo": {
+						"type": "string"
+					},
+					"type": {
+						"type": "string"
+					},
 					"password": {
 						"type": "string"
 					},
@@ -22,6 +28,8 @@
 					}
 				},
 				"required": [
+					"photo",
+					"type",
 					"password",
 					"email",
 					"name",
@@ -51,7 +59,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/UserAttributes"
+									"$ref": "#/components/schemas/UserDTO"
 								}
 							}
 						}
@@ -69,64 +77,6 @@
 						}
 					}
 				]
-			}
-		},
-		"/users": {
-			"get": {
-				"operationId": "ReadAll",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/UserAttributes"
-									},
-									"type": "array"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": [
-					{
-						"in": "query",
-						"name": "search",
-						"required": false,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
-			},
-			"post": {
-				"operationId": "Create",
-				"responses": {
-					"201": {
-						"description": "Created",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/UserAttributes"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/UserAttributes"
-							}
-						}
-					}
-				}
 			}
 		}
 	},
