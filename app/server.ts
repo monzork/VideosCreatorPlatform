@@ -45,7 +45,7 @@ export class Server {
       swaggerUi.setup(swaggerJson)
     );
 
-    db.sequelize.sync().then(() => {
+    db.sequelize?.sync().then(() => {
       this.app.listen(PORT, () => {
         logger.log('info', `--> Server successfully started at port ${PORT}'`);
       });

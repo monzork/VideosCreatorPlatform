@@ -8,25 +8,31 @@ import {
   SuccessResponse
 } from 'tsoa';
 
-import { UserAttributes } from '../db/models/user';
+import bcrypt from 'bcrypt';
+
+import { UserDTO } from '../db/models/user';
 import db from '../db/models/index';
 
 @Route('users')
 export class UserController extends Controller {
   @Get('{id}')
-  public async read(id: number): Promise<UserAttributes> {
+  public async read(id: number): Promise<UserDTO> {
     return await db.User.findByPk(id);
   }
 
   @Get()
-  public async readAll(@Query() search?: string): Promise<UserAttributes[]> {
+  public async readAll(@Query() search?: string): Promise<UserDTO[]> {
     return await db.User.findAll();
   }
 
   @SuccessResponse('201', 'Created')
   @Post()
-  public async create(@Body() user: UserAttributes): Promise<UserAttributes> {
+  public async create(@Body() user: UserDTO): Promise<UserDTO> {
     return await db.User.create(user);
+  }
+
+  async hashPassword(password: string) {
+    return await bcrypt.hash(password, 3);
   }
 
   // read(req: Request, res: Response) {

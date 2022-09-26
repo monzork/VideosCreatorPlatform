@@ -2,15 +2,17 @@
 
 import { Model, UUIDV4 } from 'sequelize';
 
-export type UserAttributes = {
+export type UserDTO = {
   id: string;
   name: string;
   email: string;
   password: string;
+  type: string;
+  photo: string;
 };
 
 module.exports = (sequelize: any, DataTypes: any) => {
-  class User extends Model<UserAttributes> implements UserAttributes {
+  class User extends Model<UserDTO> implements UserDTO {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -20,7 +22,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
     name!: string;
     email!: string;
     password!: string;
+    type!: string;
+    photo!: string;
   }
+
   User.init(
     {
       id: {
@@ -39,6 +44,14 @@ module.exports = (sequelize: any, DataTypes: any) => {
         unique: true
       },
       password: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      type: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      photo: {
         type: DataTypes.STRING,
         allowNull: false
       }

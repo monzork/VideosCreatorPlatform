@@ -18,8 +18,12 @@
     "rules": {
         "semi": [2, "always"],
         "space-before-function-paren":"off",
-        "@typescript-eslint/no-unused-vars": "error",
-        "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+        "@typescript-eslint/no-unused-vars": "off",
+        "no-array-constructor":"off",
+        "eqeqeq":"off",
+        "no-useless-constructor":"off",
+        "no-unused-vars":"off",
+        // "@typescript-eslint/consistent-type-definitions": ["error", "type"],
         "no-console": 1,
         "prettier/prettier": 2
     }

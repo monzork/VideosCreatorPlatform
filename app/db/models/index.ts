@@ -1,24 +1,20 @@
-'use strict';
+import path from 'path';
+import { Model, Sequelize } from 'sequelize';
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
+import * as dataTypes from 'sequelize';
+import fs from 'fs';
+
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(path.join(__dirname, '/../config/config.js'))[env];
-const db: any = {};
+const db: { [key: string]: any; sequelize?: Sequelize } = {};
 
-let sequelize: any;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
-    config
-  );
-}
+const sequelize: Sequelize = new Sequelize(
+  config.database,
+  config.username,
+  config.password,
+  config
+);
 
 fs.readdirSync(__dirname)
   .filter((file: string) => {
@@ -26,10 +22,10 @@ fs.readdirSync(__dirname)
       file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.ts'
     );
   })
-  .forEach((file: any) => {
+  .forEach((file: string) => {
     const model = require(path.join(__dirname, file))(
       sequelize,
-      Sequelize.DataTypes
+      dataTypes.DataTypes
     );
     db[model.name] = model;
   });
