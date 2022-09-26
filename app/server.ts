@@ -8,6 +8,9 @@ import cors from 'cors';
 import morgan from 'morgan';
 import environment from './config/environment';
 import db from './db/models';
+
+import * as swaggerJson from '../public/swagger.json';
+
 dotenv.config();
 
 const PORT: number = environment.port ? +environment.port : 5000;
@@ -37,13 +40,9 @@ export class Server {
     this.app.use(bodyParser.json());
 
     this.app.use(
-      '/docs',
+      ['/openapi', '/docs', '/swagger'],
       swaggerUi.serve,
-      swaggerUi.setup(undefined, {
-        swaggerOptions: {
-          url: '/swagger.json'
-        }
-      })
+      swaggerUi.setup(swaggerJson)
     );
 
     db.sequelize.sync().then(() => {

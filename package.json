@@ -10,6 +10,7 @@
     "swagger": "tsoa spec",
     "start": "node dist/server.js",
     "start:dev": "nodemon --inspect app/server.ts",
+    "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\"",
     "lint": "eslint --ext .js,.ts .",
     "prettier-format": "prettier --config .prettierrc src/**/*.ts --write",
     "test": "echo \"Error: no test specified\" && exit 1"

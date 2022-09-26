@@ -1,68 +1,84 @@
-import { Request, Response } from 'express';
+import {
+  Get,
+  Route,
+  Controller,
+  Query,
+  Post,
+  Body,
+  SuccessResponse
+} from 'tsoa';
+
 import { UserAttributes } from '../db/models/user';
 import db from '../db/models/index';
 
-export class UserController {
-  readAll(req: Request, res: Response) {
-    db.User.findAll()
-      .then((users: UserAttributes[]) => {
-        res.json(users);
-      })
-      .catch((err: any) => {
-        res.json(err);
-      });
+@Route('users')
+export class UserController extends Controller {
+  @Get('{id}')
+  public async read(id: number): Promise<UserAttributes> {
+    return await db.User.findByPk(id);
   }
 
-  read(req: Request, res: Response) {
-    db.User.findById(req.params.id)
-      .then((user: UserAttributes | null) => {
-        if (user) {
-          res.json(user);
-        } else {
-          res.status(204).send();
-        }
-      })
-      .catch((err: any) => {
-        res.json(err);
-      });
+  @Get()
+  public async readAll(@Query() search?: string): Promise<UserAttributes[]> {
+    return await db.User.findAll();
   }
 
-  create(req: Request, res: Response) {
-    db.User.create(req.body)
-      .then((user: UserAttributes) => {
-        res.json(user);
-      })
-      .catch((err: any) => {
-        res.status(500).json(err);
-      });
+  @SuccessResponse('201', 'Created')
+  @Post()
+  public async create(@Body() user: UserAttributes): Promise<UserAttributes> {
+    return await db.User.create(user);
   }
 
-  update(req: Request, res: Response) {
-    db.User.update(req.body, {
-      fields: Object.keys(req.body),
-      where: { id: req.params.id }
-    })
-      .then((affectedRows: [number, UserAttributes[]]) => {
-        res.json({
-          affectedRows: Number(affectedRows)
-        });
-      })
-      .catch((err: any) => {
-        res.json(err);
-      });
-  }
+  // read(req: Request, res: Response) {
+  //   db.User.findById(req.params.id)
+  //     .then((user: UserAttributes | null) => {
+  //       if (user) {
+  //         res.json(user);
+  //       } else {
+  //         res.status(204).send();
+  //       }
+  //     })
+  //     .catch((err: any) => {
+  //       res.json(err);
+  //     });
+  // }
 
-  delete(req: Request, res: Response) {
-    db.User.destroy({
-      where: { id: req.params.id }
-    })
-      .then((removedRows: number) => {
-        res.json({
-          removedRows
-        });
-      })
-      .catch((err: any) => {
-        res.json(err);
-      });
-  }
+  // create(req: Request, res: Response) {
+  //   db.User.create(req.body)
+  //     .then((user: UserAttributes) => {
+  //       res.json(user);
+  //     })
+  //     .catch((err: any) => {
+  //       res.status(500).json(err);
+  //     });
+  // }
+
+  // update(req: Request, res: Response) {
+  //   db.User.update(req.body, {
+  //     fields: Object.keys(req.body),
+  //     where: { id: req.params.id }
+  //   })
+  //     .then((affectedRows: [number, UserAttributes[]]) => {
+  //       res.json({
+  //         affectedRows: Number(affectedRows)
+  //       });
+  //     })
+  //     .catch((err: any) => {
+  //       res.json(err);
+  //     });
+  // }
+
+  // delete(req: Request, res: Response) {
+  //   db.User.destroy({
+  //     where: { id: req.params.id }
+  //   })
+  //     .then((removedRows: number) => {
+  //       res.json({
+  //         removedRows
+  //       });
+  //     })
+  //     .catch((err: any) => {
+  //       res.json(err);
+  //     });
+  // }
 }
