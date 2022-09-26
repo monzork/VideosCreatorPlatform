@@ -24,6 +24,22 @@ module.exports = (sequelize: any, DataTypes: any) => {
     password!: string;
     type!: string;
     photo!: string;
+
+    static associate(models: any) {
+      User.belongsToMany(models.User, {
+        through: models.Follow,
+        as: 'Parents',
+        foreignKey: 'idFollowed'
+      });
+      User.belongsToMany(models.User, {
+        through: models.Follow,
+        as: 'Siblings',
+        foreignKey: 'idFollower'
+      });
+      User.belongsToMany(models.Video, {
+        through: models.UserVideo
+      });
+    }
   }
 
   User.init(
