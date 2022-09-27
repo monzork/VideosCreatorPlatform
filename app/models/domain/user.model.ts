@@ -6,7 +6,8 @@ import {
   PrimaryKey,
   BelongsToMany,
   Index,
-  AutoIncrement
+  AutoIncrement,
+  Unique
 } from 'sequelize-typescript';
 import UserVideo from './uservideo.model';
 import Video from './video.model';
@@ -28,6 +29,7 @@ export default class User extends Model {
   @Column
   public name: string;
 
+  @Unique
   @Column
   public email: string;
 
