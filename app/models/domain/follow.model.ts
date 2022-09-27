@@ -6,13 +6,15 @@ import {
   Model,
   Table,
   PrimaryKey,
-  Index
+  Index,
+  AutoIncrement
 } from 'sequelize-typescript';
 import User from './user.model';
 
 @Table({ tableName: 'follow' })
 export default class Follow extends Model {
   @Index
+  @AutoIncrement
   @PrimaryKey
   @Column
   public id: number;

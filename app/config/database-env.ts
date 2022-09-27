@@ -7,7 +7,7 @@ interface IConfig {
   [key: string]: SequelizeOptions;
 }
 
-export default {
+const config = {
   development: {
     username: process.env.DB_USER!,
     password: process.env.DB_PASS!,
@@ -26,3 +26,5 @@ export default {
     dialect: 'postgres'
   }
 } as IConfig;
+export default config;
+module.exports = config;

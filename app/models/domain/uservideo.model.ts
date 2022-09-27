@@ -5,7 +5,8 @@ import {
   PrimaryKey,
   Index,
   ForeignKey,
-  Default
+  Default,
+  AutoIncrement
 } from 'sequelize-typescript';
 import User from './user.model';
 import Video from './video.model';
@@ -13,6 +14,7 @@ import Video from './video.model';
 @Table({ tableName: 'uservideo', timestamps: true })
 export default class UserVideo extends Model {
   @Index
+  @AutoIncrement
   @PrimaryKey
   @Column
   public id: number;

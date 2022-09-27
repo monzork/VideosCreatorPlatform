@@ -5,7 +5,8 @@ import {
   Table,
   PrimaryKey,
   BelongsToMany,
-  Index
+  Index,
+  AutoIncrement
 } from 'sequelize-typescript';
 import UserVideo from './uservideo.model';
 import Video from './video.model';
@@ -13,6 +14,7 @@ import Video from './video.model';
 @Table({ tableName: 'user' })
 export default class User extends Model {
   @Index
+  @AutoIncrement
   @PrimaryKey
   @Column
   public id: number;
@@ -27,7 +29,7 @@ export default class User extends Model {
   public name: string;
 
   @Column
-  public email: number;
+  public email: string;
 
   @Column
   public password: string;

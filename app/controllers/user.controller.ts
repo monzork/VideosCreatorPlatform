@@ -7,12 +7,6 @@ import {
   Body,
   SuccessResponse
 } from 'tsoa';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
-import { UserDTO } from '../models/modelss/user';
-import User from '@/models/domain/user.model';
-import Follow from '@/models/domain/follow.model';
-// import db from '../models/modelss/index';
 
 interface sigIn {
   name: string;
@@ -22,7 +16,7 @@ interface sigIn {
 @Route('users')
 export class UserController extends Controller {
   @Get('{id}')
-  public async read(id: number): Promise<UserDTO> {
+  public async read(id: number): Promise<any> {
     return { email: '', id: '', name: '', password: '', photo: '', type: '' };
   }
 
