@@ -2,7 +2,7 @@ FROM node:16-alpine3.15
 
 WORKDIR /usr
 
-COPY package.json ./
+COPY package*.json ./
 
 COPY tsconfig.json ./
 
@@ -22,9 +22,7 @@ FROM node:16-alpine3.15
 
 WORKDIR /usr
 
-COPY package.json ./
-
-COPY .env .
+COPY package*.json ./
 
 RUN npm install --omit=dev
 
