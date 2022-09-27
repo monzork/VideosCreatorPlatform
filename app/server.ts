@@ -15,6 +15,7 @@ import { RegisterRoutes } from '../build/routes';
 // ########################################################################
 // controllers
 import './controllers/user.controller';
+import './controllers/auth.controller';
 // ########################################################################
 
 dotenv.config();
