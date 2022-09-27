@@ -1,7 +1,5 @@
 import {
-  BelongsTo,
   Column,
-  ForeignKey,
   HasMany,
   Model,
   Table,
@@ -9,7 +7,8 @@ import {
   BelongsToMany,
   Index
 } from 'sequelize-typescript';
-import Follow from './follow.model';
+import UserVideo from './uservideo.model';
+import Video from './video.model';
 
 @Table({ tableName: 'user' })
 export default class User extends Model {
@@ -18,11 +17,11 @@ export default class User extends Model {
   @Column
   public id: number;
 
-  // @BelongsToMany(() => User, () => Follow)
-  // public follows: Follow[];
+  @BelongsToMany(() => Video, () => UserVideo)
+  public videos: Video[];
 
-  // @BelongsToMany(() => User, () => Follow)
-  // public followed: Follow[];
+  @HasMany(() => Video)
+  public video: Video[];
 
   @Column
   public name: string;
