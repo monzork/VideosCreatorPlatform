@@ -6,11 +6,24 @@ import {
   Model,
   Table,
   PrimaryKey,
-  BelongsToMany
+  BelongsToMany,
+  Index
 } from 'sequelize-typescript';
+import Follow from './follow.model';
 
 @Table({ tableName: 'user' })
 export default class User extends Model {
+  @Index
+  @PrimaryKey
+  @Column
+  public id: number;
+
+  // @BelongsToMany(() => User, () => Follow)
+  // public follows: Follow[];
+
+  // @BelongsToMany(() => User, () => Follow)
+  // public followed: Follow[];
+
   @Column
   public name: string;
 

@@ -5,14 +5,25 @@ import {
   HasMany,
   Model,
   Table,
-  PrimaryKey
+  PrimaryKey,
+  Index
 } from 'sequelize-typescript';
+import User from './user.model';
 
 @Table({ tableName: 'follow' })
 export default class Follow extends Model {
+  @Index
+  @PrimaryKey
   @Column
-  public idFollowed: string;
+  public id: number;
 
-  @Column
-  public idFollower: number;
+  // @ForeignKey(() => User)
+  // @Column
+  @BelongsTo(() => User, 'fk_idFollowed')
+  public followed: User[];
+
+  // @ForeignKey(() => User)
+  // @Column
+  @BelongsTo(() => User, 'fk_idFollower')
+  public follower: User[];
 }

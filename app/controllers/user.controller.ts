@@ -10,6 +10,8 @@ import {
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { UserDTO } from '../models/modelss/user';
+import User from '@/models/domain/user.model';
+import Follow from '@/models/domain/follow.model';
 // import db from '../models/modelss/index';
 
 interface sigIn {

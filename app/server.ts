@@ -8,7 +8,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import environment from './config/environment';
 
-import Sequelice from './models/db';
+import Sequelize from './models/db';
 
 import * as swaggerJson from '../public/swagger.json';
 
@@ -46,7 +46,7 @@ export class Server {
       swaggerUi.setup(swaggerJson)
     );
 
-    Sequelice.sync().then(() => {
+    Sequelize.sync({ force: true }).then(() => {
       this.app.listen(PORT, () => {
         logger.log('info', `--> Server successfully started at port ${PORT}'`);
       });

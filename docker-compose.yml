@@ -14,7 +14,7 @@ services:
       POSTGRES_PASSWORD: "${DB_PASS:-password}"
       PGDATA: "/data/postgres"
     volumes:
-       - postgres:/data/postgres
+      - postgres:/data/postgres
     ports:
       - "15432:5432"
     restart: unless-stopped
