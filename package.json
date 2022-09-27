@@ -4,22 +4,17 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "build": "rimraf .dist/; npx tsc",
-    "predev": "npm run swagger",
-    "prebuild": "npm run swagger",
-    "swagger": "tsoa spec",
-    "start": "node dist/server.js",
-    "start:dev": "nodemon --inspect app/server.ts",
-    "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\"",
-    "lint": "eslint --ext .js,.ts .",
-    "prettier-format": "prettier --config .prettierrc src/**/*.ts --write",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "tsoa:initial": "tsoa spec-and-routes",
+    "dev": "concurrently \"nodemon --inspect\" \"nodemon -x tsoa spec-and-routes\"",
+    "build": "tsoa spec-and-routes && tsc",
+    "start": "node build/src/server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "class-transformer": "^0.5.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",

@@ -3,14 +3,19 @@ import dotenv from 'dotenv';
 import logger from './logger';
 import swaggerUi from 'swagger-ui-express';
 import bodyParser = require('body-parser');
-import * as routes from './routes';
+
 import cors from 'cors';
 import morgan from 'morgan';
 import environment from './config/environment';
 
 import Sequelize from './models/db';
 
-import * as swaggerJson from '../public/swagger.json';
+import { RegisterRoutes } from '../build/routes';
+
+// ########################################################################
+// controllers
+import './controllers/user.controller';
+// ########################################################################
 
 dotenv.config();
 
@@ -40,19 +45,17 @@ export class Server {
 
     this.app.use(bodyParser.json());
 
-    this.app.use(
-      ['/openapi', '/docs', '/swagger'],
-      swaggerUi.serve,
-      swaggerUi.setup(swaggerJson)
+    RegisterRoutes(this.app);
+
+    this.app.use('/docs', swaggerUi.serve, async (_req: any, res: any) =>
+      res.send(swaggerUi.generateHTML(await import('../build/swagger.json')))
     );
 
-    Sequelize.sync({ force: true }).then(() => {
+    Sequelize.sync().then(() => {
       this.app.listen(PORT, () => {
         logger.log('info', `--> Server successfully started at port ${PORT}'`);
       });
     });
-
-    routes.initRoutes(this.app);
   }
 
   getApp() {
@@ -62,11 +65,3 @@ export class Server {
 
 // eslint-disable-next-line no-new
 new Server();
-
-// const allowedOrigins = ['http://localhost:5000'];
-
-// const options: cors.CorsOptions = {
-//   origin: allowedOrigins
-// };
-
-// app.use(cors(options));

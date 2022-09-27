@@ -7,6 +7,13 @@ import {
   Body,
   SuccessResponse
 } from 'tsoa';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+
+import User from '../models/domain/user.model';
+import { ReadUserDto } from '../models/schemas/users/user';
+
+import { plainToClass } from 'class-transformer';
 
 interface sigIn {
   name: string;
@@ -15,9 +22,18 @@ interface sigIn {
 
 @Route('users')
 export class UserController extends Controller {
+  /**
+   * Get user by id
+   *
+   * @summary Get user
+   *
+   * @param {string} id user id
+   */
   @Get('{id}')
-  public async read(id: number): Promise<any> {
-    return { email: '', id: '', name: '', password: '', photo: '', type: '' };
+  public async get(id: number): Promise<ReadUserDto> {
+    const user = await User.findOne({ where: { id } });
+
+    return plainToClass(ReadUserDto, user, { excludeExtraneousValues: true });
   }
 
   // @Get()

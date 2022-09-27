@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Nodemon: Launch Express.js + TypeScript",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "dev"],
+      "sourceMaps": true,
+      "port": 9229
+    },
+    {
+      "name": "Nodemon: Attach Express.js + TypeScript",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "restart": true,
+      "protocol": "inspector"
+    }
+  ]
+}
