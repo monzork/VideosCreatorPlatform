@@ -11,14 +11,12 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
 import User from '../models/domain/user.model';
-import { ReadUserDto } from '../models/schemas/users/user';
+import {
+  ReadUserDto,
+  ReadUserDtoPaginated
+} from '../models/schemas/users/user';
 
-import { plainToClass } from 'class-transformer';
-
-interface sigIn {
-  name: string;
-  password: string;
-}
+import { plainToInstance } from 'class-transformer';
 
 @Route('users')
 export class UserController extends Controller {
@@ -33,7 +31,40 @@ export class UserController extends Controller {
   public async get(id: number): Promise<ReadUserDto> {
     const user = await User.findOne({ where: { id } });
 
-    return plainToClass(ReadUserDto, user, { excludeExtraneousValues: true });
+    return plainToInstance(ReadUserDto, user, {
+      excludeExtraneousValues: true
+    });
+  }
+
+  /**
+   * Get users paginated
+   *
+   * @summary Get users
+   *
+   * @param {string} pageNumber page number
+   * @param {string} pageSize page size
+   */
+  @Get()
+  public async getAll(
+    @Query() search?: string,
+    @Query() pageNumber: number = 1,
+    @Query() pageSize: number = 5
+  ): Promise<ReadUserDtoPaginated> {
+    const totalUsers = await User.count();
+
+    const users = await User.findAll({
+      limit: pageSize,
+      offset: (pageNumber - 1) * pageSize
+    });
+
+    const response: ReadUserDtoPaginated = {
+      total: totalUsers,
+      data: plainToInstance(ReadUserDto, users, {
+        excludeExtraneousValues: true
+      })
+    };
+
+    return response;
   }
 
   // @Get()
