@@ -7,7 +7,7 @@
     "predev": "tsoa spec-and-routes",
     "dev": "concurrently \"nodemon --inspect\" \"nodemon -x tsoa spec-and-routes\"",
     "build": "tsoa spec-and-routes && tsc",
-    "start": "node build/src/server.js"
+    "start": "node dist/app/server.js"
   },
   "keywords": [],
   "author": "",
