@@ -53,6 +53,9 @@ export class UserController extends Controller {
   }
 
   /**
+   * Create user
+   *
+   * @summary Create user
    *
    * @param user
    */
@@ -60,7 +63,6 @@ export class UserController extends Controller {
   @Post()
   public async create(@Body() user: InsertUserDto): Promise<ReadUserDto> {
     user.password = bcrypt.hashSync(user.password, +process.env.SALT!);
-    const newUser = instanceToPlain(user);
-    return autoMap(ReadUserDto, await User.create(newUser));
+    return autoMap(ReadUserDto, await User.create(instanceToPlain(user)));
   }
 }

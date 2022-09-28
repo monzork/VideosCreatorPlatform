@@ -7,7 +7,9 @@ import {
   BelongsToMany,
   ForeignKey,
   Default,
-  AutoIncrement
+  AutoIncrement,
+  NotNull,
+  AllowNull
 } from 'sequelize-typescript';
 import User from './user.model';
 import UserVideo from './uservideo.model';
@@ -25,11 +27,9 @@ export default class Video extends Model {
   public published: boolean = false;
 
   @Column
-  // @NotNull
   public title: string;
 
   @Column
-  // @NotNull
   public url: string;
 
   @BelongsToMany(() => User, () => UserVideo)
@@ -37,5 +37,5 @@ export default class Video extends Model {
 
   @ForeignKey(() => User)
   @Column
-  public userId: number;
+  public createdBy: number;
 }

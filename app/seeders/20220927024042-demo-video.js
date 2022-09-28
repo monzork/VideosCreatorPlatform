@@ -4,7 +4,7 @@ module.exports = {
       {
         url: 'https://www.youtube.com/watch?v=xcJtL7QggTI',
         title: 'Demo Video',
-        userId: 2,
+        createdBy: 2,
         published: false,
         createdAt: new Date(),
         updatedAt: new Date()
