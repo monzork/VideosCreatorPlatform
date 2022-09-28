@@ -1,14 +1,15 @@
-import { Get, Route, Controller, Query } from 'tsoa';
-
+import { Get, Route, Controller, Query, Post, Body } from 'tsoa';
+import bcrypt from 'bcrypt';
 import User from '../models/domain/user.model';
 import {
+  InsertUserDto,
   ReadUserDto,
   ReadUserDtoPaginated
 } from '../models/schemas/users/user';
+import { instanceToPlain } from 'class-transformer';
+import autoMap from '../utils/autoMap';
 
-import { plainToInstance } from 'class-transformer';
-
-@Route('v1/users')
+@Route('users')
 export class UserController extends Controller {
   /**
    * Get user by id
@@ -19,11 +20,7 @@ export class UserController extends Controller {
    */
   @Get('{id}')
   public async get(id: number): Promise<ReadUserDto> {
-    const user = await User.findOne({ where: { id } });
-
-    return plainToInstance(ReadUserDto, user, {
-      excludeExtraneousValues: true
-    });
+    return autoMap(ReadUserDto, await User.findOne({ where: { id } }));
   }
 
   /**
@@ -49,45 +46,21 @@ export class UserController extends Controller {
 
     const response: ReadUserDtoPaginated = {
       total: totalUsers,
-      data: plainToInstance(ReadUserDto, users, {
-        excludeExtraneousValues: true
-      })
+      data: autoMap(ReadUserDto, users)
     };
 
     return response;
   }
 
-  // @SuccessResponse('201', 'Created')
-  // @Post()
-  // public async create(@Body() user: UserDTO): Promise<UserDTO> {
-  //   user.password = bcrypt.hashSync(user.password, 3);
-  //   return await db.User.create(user);
-  // }
+  /**
+   *
+   * @param user
+   */
 
-  // @SuccessResponse(200, 'Sign In')
-  // async sigIn(userSigIn: sigIn) {
-  //   const { dataValues: userFound } = await db.User.findOne({
-  //     where: {
-  //       name: userSigIn.name
-  //     }
-  //   });
-
-  //   if (bcrypt.compareSync(userSigIn.password, userFound.password)) {
-  //     const secret = process.env.SECRET as string;
-  //     return { token: jwt.sign(userFound, secret) };
-  //   }
-  // }
-  // read(req: Request, res: Response) {
-  //   db.User.findById(req.params.id)
-  //     .then((user: UserAttributes | null) => {
-  //       if (user) {
-  //         res.json(user);
-  //       } else {
-  //         res.status(204).send();
-  //       }
-  //     })
-  //     .catch((err: any) => {
-  //       res.json(err);
-  //     });
-  // }
+  @Post()
+  public async create(@Body() user: InsertUserDto): Promise<ReadUserDto> {
+    user.password = bcrypt.hashSync(user.password, +process.env.SALT!);
+    const newUser = instanceToPlain(user);
+    return autoMap(ReadUserDto, await User.create(newUser));
+  }
 }

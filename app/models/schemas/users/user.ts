@@ -1,5 +1,4 @@
-import { Expose } from 'class-transformer';
-
+import { Expose, Exclude } from 'class-transformer';
 export class ReadUserDto {
   @Expose() id: number;
   @Expose() name: string;
@@ -13,6 +12,10 @@ export class ReadUserDtoPaginated {
   @Expose() data: ReadUserDto[];
 }
 
-// export type ReadUserDtoType = {
-//   [K in keyof ReadUserDto]-?: ReadUserDto[K];
-// };
+export class InsertUserDto {
+  @Expose() name: string;
+  @Expose() email: string;
+  @Expose() type: string;
+  @Expose() photo: string;
+  @Expose() password: string;
+}

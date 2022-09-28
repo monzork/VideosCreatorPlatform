@@ -31,11 +31,9 @@ export class AuthController extends Controller {
       return null;
     }
 
-    const pass = bcrypt.hashSync('123456', 3);
-
     try {
-      if (bcrypt.compareSync(userSignIn.password, pass)) {
-        const secret = process.env.SECRET as string;
+      if (bcrypt.compareSync(userSignIn.password, targetUser.password)) {
+        const secret = process.env.SECRET!;
         return {
           token: jwt.sign(
             { id: targetUser.id, email: targetUser.email },

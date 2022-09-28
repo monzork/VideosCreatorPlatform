@@ -20,7 +20,7 @@ import './controllers/auth.controller';
 
 dotenv.config();
 
-const PORT: number = environment.port ? +environment.port : 5000;
+const PORT: number = +environment.port! || 5000;
 
 export class Server {
   private app: Express;
