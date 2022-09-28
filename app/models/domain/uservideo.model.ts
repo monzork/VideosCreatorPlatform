@@ -6,7 +6,8 @@ import {
   Index,
   ForeignKey,
   Default,
-  AutoIncrement
+  AutoIncrement,
+  BelongsTo
 } from 'sequelize-typescript';
 import User from './user.model';
 import Video from './video.model';
@@ -29,6 +30,12 @@ export default class UserVideo extends Model {
   @ForeignKey(() => Video)
   @Column
   public videoId: number;
+
+  @BelongsTo(() => Video)
+  public video: Video;
+
+  @BelongsTo(() => User)
+  public user: User;
 
   @ForeignKey(() => User)
   @Column

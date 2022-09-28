@@ -8,8 +8,8 @@ import {
   ForeignKey,
   Default,
   AutoIncrement,
-  NotNull,
-  AllowNull
+  HasMany,
+  BelongsTo
 } from 'sequelize-typescript';
 import User from './user.model';
 import UserVideo from './uservideo.model';
@@ -31,6 +31,12 @@ export default class Video extends Model {
 
   @Column
   public url: string;
+
+  @BelongsTo(() => User)
+  public user: User;
+
+  @HasMany(() => UserVideo)
+  public uservideos: UserVideo[];
 
   @BelongsToMany(() => User, () => UserVideo)
   public users: User[];

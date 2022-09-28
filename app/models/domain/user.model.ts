@@ -26,6 +26,9 @@ export default class User extends Model {
   @HasMany(() => Video)
   public video: Video[];
 
+  @HasMany(() => UserVideo)
+  public userVideo: UserVideo[];
+
   @Column
   public name: string;
 
