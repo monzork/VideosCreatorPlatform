@@ -16,18 +16,3 @@ services:
     ports:
       - "${DB_PORT}:5432"
     restart: unless-stopped
-
-  api:
-    container_name: webapi
-    build:
-      context: ./
-      dockerfile: ./Dockerfile
-    restart: unless-stopped
-    environment:
-      - DB_HOST=demo_postgres
-      - PORT=${PORT}
-      - DB_USER=${DB_USER}
-      - DB_PASS=${DB_PASS}
-      - DB_NAME=${DB_NAME}
-    ports:
-      - ${PORT}:5000
