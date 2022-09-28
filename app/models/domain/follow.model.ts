@@ -1,8 +1,6 @@
 import {
   BelongsTo,
   Column,
-  ForeignKey,
-  HasMany,
   Model,
   Table,
   PrimaryKey,
@@ -19,13 +17,9 @@ export default class Follow extends Model {
   @Column
   public id: number;
 
-  // @ForeignKey(() => User)
-  // @Column
-  @BelongsTo(() => User, 'fk_idFollowed')
-  public followed: User[];
+  @BelongsTo(() => User, 'followedId')
+  public followed: User;
 
-  // @ForeignKey(() => User)
-  // @Column
-  @BelongsTo(() => User, 'fk_idFollower')
-  public follower: User[];
+  @BelongsTo(() => User, 'followerId')
+  public follower: User;
 }
