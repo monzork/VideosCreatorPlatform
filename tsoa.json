@@ -10,6 +10,7 @@
   "routes": {
     "basePath": "/v1",
     "entryFile": "./app/server.ts",
-    "routesDir": "./build"
+    "routesDir": "./build",
+    "authenticationModule": "./app/middlewares/auth.ts"
   }
 }

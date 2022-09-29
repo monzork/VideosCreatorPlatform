@@ -1,4 +1,14 @@
-import { Get, Route, Controller, Query, Post, Body, Put } from 'tsoa';
+import {
+  Get,
+  Route,
+  Controller,
+  Query,
+  Post,
+  Body,
+  Put,
+  Security,
+  Header
+} from 'tsoa';
 import Video from '../models/domain/video.model';
 import { instanceToPlain } from 'class-transformer';
 import autoMap from '../utils/autoMap';
@@ -25,7 +35,9 @@ export class UserVideoController extends Controller {
    * @param {string} pageSize page size
    */
   @Get()
+  @Security('jwt')
   public async getVideosInformation(
+    @Header('token') token: string,
     @Query() pageNumber: number = 1,
     @Query() pageSize: number = 5
   ): Promise<ReadUserVideoInformationDto[]> {
