@@ -17,35 +17,70 @@ import { ReadUserDto } from '../models/schemas/users/user';
 @Route('uservideo')
 export class UserVideoController extends Controller {
   /**
-   * Get video by id
+   * Get video information paginated
    *
-   * @summary Get uservideo
-   *
-   * @param {string} id uservideo id
-   */
-  @Get('{id}')
-  public async get(id: number): Promise<ReadUserVideoDto> {
-    return autoMap(
-      ReadUserVideoDto,
-      await UserVideo.findOne({ where: { id } })
-    );
-  }
-
-  /**
-   * Get videos paginated
-   *
-   * @summary Get videos
+   * @summary Get video information
    *
    * @param {string} pageNumber page number
    * @param {string} pageSize page size
    */
   @Get()
+  public async getVideosInformation(
+    @Query() pageNumber: number = 1,
+    @Query() pageSize: number = 5
+  ): Promise<ReadUserVideoInformationDto[]> {
+    const userVideoGroup = await UserVideo.findAll({
+      attributes: [
+        [sequelize.fn('sum', sequelize.col('view')), 'view'],
+        [
+          sequelize.fn('sum', sequelize.cast(sequelize.col('like'), 'integer')),
+          'like'
+        ]
+      ],
+      limit: pageSize,
+      offset: (pageNumber - 1) * pageSize,
+      include: [
+        {
+          model: Video,
+          attributes: ['id', 'published', 'title', 'url'],
+          include: [
+            {
+              model: User,
+              as: 'user',
+              attributes: ['name']
+            }
+          ]
+        }
+      ],
+      group: ['video.id', 'video->user.id']
+    });
+
+    return userVideoGroup.map((usg) => ({
+      view: usg.view,
+      id: usg.videoId,
+      like: Number(usg.like),
+      published: usg.video.published,
+      title: usg.video.title,
+      url: usg.video.url,
+      name: usg.video.user.name
+    }));
+  }
+
+  /**
+   * Get video information paginated
+   *
+   * @summary Get video information
+   *
+   * @param {string} pageNumber page number
+   * @param {string} pageSize page size
+   */
+  @Get('{id}')
   public async getVideoInformation(
-    @Query() videoId: number
+    id: number
   ): Promise<ReadUserVideoInformationDto> {
     const userVideoGroup = await UserVideo.findOne({
       attributes: [
-        [sequelize.fn('sum', sequelize.col('view')), 'view'],
+        [sequelize.fn('sum', sequelize.col('view')), 'viewCount'],
         [
           sequelize.fn('sum', sequelize.cast(sequelize.col('like'), 'integer')),
           'like'
@@ -64,7 +99,7 @@ export class UserVideoController extends Controller {
         }
       ],
       where: {
-        videoId
+        id
       },
       group: ['video.id', 'video->user.id']
     });
@@ -92,6 +127,14 @@ export class UserVideoController extends Controller {
       await UserVideo.create(instanceToPlain(userVideo))
     );
   }
+
+  /**
+   * Update Like status
+   *
+   * @summary Update Like status
+   *
+   * @param userVideo
+   */
 
   @Put()
   public async update(

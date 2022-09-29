@@ -1,12 +1,10 @@
-import { Route, Controller, Body, SuccessResponse, Post } from 'tsoa';
+import { Route, Controller, Body, Post } from 'tsoa';
 
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
 import { ReadSignInUserDto, SignInUserDto } from '../models/schemas/users/auth';
 import User from '../models/domain/user.model';
-import { plainToInstance } from 'class-transformer';
-import { ReadUserDto } from '../models/schemas/users/user';
 
 @Route('auth')
 export class AuthController extends Controller {
@@ -41,6 +39,7 @@ export class AuthController extends Controller {
           )
         };
       }
+      this.setStatus(401);
       return null;
     } catch (err) {
       this.setStatus(401);

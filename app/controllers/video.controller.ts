@@ -37,7 +37,11 @@ export class VideoController extends Controller {
     @Query() pageNumber: number = 1,
     @Query() pageSize: number = 5
   ): Promise<ReadVideoDtoPaginated> {
-    const totalVideos = await Video.count();
+    const totalVideos = await Video.count({
+      where: {
+        published: true
+      }
+    });
 
     const videos = await Video.findAll({
       limit: pageSize,
