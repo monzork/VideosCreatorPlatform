@@ -3,17 +3,11 @@ FROM node:16-alpine3.15
 WORKDIR /usr
 
 COPY package*.json ./
-
 COPY tsconfig.json ./
-
 COPY tsoa.json ./
-
 COPY app ./app
 
-RUN ls -a
-
 RUN npm install
-
 RUN npm run build
 
 ## this is stage two , where the app actually runs
@@ -26,7 +20,7 @@ COPY package*.json ./
 
 RUN npm install --omit=dev
 
-COPY --from=0 /usr/dist .
+COPY --from=0 /usr/dist ./
 
 RUN npm install pm2 -g
 
