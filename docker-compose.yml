@@ -19,7 +19,7 @@ services:
 
   api:
     container_name: webapi
-    image: "monzork/videocreationapi"
+    image: "monzork/videoscreatorplatform_api"
     restart: unless-stopped
     environment:
       - DB_HOST=demo_postgres
