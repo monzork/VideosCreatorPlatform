@@ -1,4 +1,4 @@
-import { Get, Route, Controller, Query, Post, Body } from 'tsoa';
+import { Get, Route, Controller, Query, Post, Body, Security } from 'tsoa';
 import bcrypt from 'bcrypt';
 import User from '../models/domain/user.model';
 import {
@@ -8,6 +8,7 @@ import {
 } from '../models/schemas/users/user';
 import { instanceToPlain } from 'class-transformer';
 import autoMap from '../utils/autoMap';
+import jwt from 'jsonwebtoken';
 
 @Route('users')
 export class UserController extends Controller {
@@ -19,6 +20,7 @@ export class UserController extends Controller {
    * @param {string} id user id
    */
   @Get('{id}')
+  @Security('jwt')
   public async get(id: number): Promise<ReadUserDto> {
     return autoMap(ReadUserDto, await User.findOne({ where: { id } }));
   }
@@ -32,6 +34,7 @@ export class UserController extends Controller {
    * @param {string} pageSize page size
    */
   @Get()
+  @Security('jwt')
   public async getAll(
     @Query() search?: string,
     @Query() pageNumber: number = 1,
@@ -61,8 +64,14 @@ export class UserController extends Controller {
    */
 
   @Post()
-  public async create(@Body() user: InsertUserDto): Promise<ReadUserDto> {
+  public async create(@Body() user: InsertUserDto): Promise<{ token: string }> {
     user.password = bcrypt.hashSync(user.password, +process.env.SALT!);
-    return autoMap(ReadUserDto, await User.create(instanceToPlain(user)));
+    const userInserted = await User.create(instanceToPlain(user));
+    return {
+      token: jwt.sign(
+        { id: userInserted.id, email: userInserted.email },
+        process.env.SECRET!
+      )
+    };
   }
 }

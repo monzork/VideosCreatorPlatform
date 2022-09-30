@@ -87,6 +87,7 @@ export class UserVideoController extends Controller {
    * @param {string} pageSize page size
    */
   @Get('{id}')
+  @Security('jwt')
   public async getVideoInformation(
     id: number
   ): Promise<ReadUserVideoInformationDto> {
@@ -149,6 +150,7 @@ export class UserVideoController extends Controller {
    */
 
   @Put()
+  @Security('jwt')
   public async update(
     @Body() userVideo: UpdateUserVideoDto
   ): Promise<number[]> {

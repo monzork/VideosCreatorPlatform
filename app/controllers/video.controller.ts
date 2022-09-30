@@ -1,4 +1,4 @@
-import { Get, Route, Controller, Query, Post, Body, Put } from 'tsoa';
+import { Get, Route, Controller, Query, Post, Body, Put, Security } from 'tsoa';
 import Video from '../models/domain/video.model';
 import { instanceToPlain } from 'class-transformer';
 import autoMap from '../utils/autoMap';
@@ -32,6 +32,7 @@ export class VideoController extends Controller {
    * @param {string} pageSize page size
    */
   @Get()
+  @Security('jwt')
   public async getAll(
     @Query() search?: string,
     @Query() pageNumber: number = 1,
@@ -62,11 +63,13 @@ export class VideoController extends Controller {
    */
 
   @Post()
+  @Security('jwt')
   public async create(@Body() video: InsertVideoDto): Promise<ReadVideoDto> {
     return autoMap(ReadVideoDto, await Video.create(instanceToPlain(video)));
   }
 
   @Put()
+  @Security('jwt')
   public async update(@Body() video: UpdateVideoDto): Promise<number[]> {
     return await Video.update(video, { where: { id: video.id } });
   }

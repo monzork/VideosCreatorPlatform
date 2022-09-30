@@ -1,4 +1,13 @@
-import { Route, Controller, Post, Body, Delete, Query, Get } from 'tsoa';
+import {
+  Route,
+  Controller,
+  Post,
+  Body,
+  Delete,
+  Query,
+  Get,
+  Security
+} from 'tsoa';
 import { instanceToPlain } from 'class-transformer';
 import {
   InsertFollowDto,
@@ -34,6 +43,7 @@ export class FollowController extends Controller {
    * @param followedId {}
    */
   @Get()
+  @Security('jwt')
   public async getAllFollowersById(
     @Query() followedId: number,
     @Query() pageNumber: number = 1,
@@ -70,6 +80,7 @@ export class FollowController extends Controller {
    *
    */
   @Delete()
+  @Security('jwt')
   public async unfollow(@Body() follow: InsertFollowDto): Promise<number> {
     return await Follow.destroy({
       where: {
