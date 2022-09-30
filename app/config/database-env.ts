@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import path from 'path';
 import { SequelizeOptions } from 'sequelize-typescript';
 
 dotenv.config();
@@ -15,15 +16,8 @@ const config = {
     host: process.env.DB_HOST!,
     port: process.env.DB_PORT,
     dialect: 'postgres',
+    models: [path.join(__dirname, '../models/domain')],
     logging: false
-  },
-  production: {
-    username: 'root',
-    password: 'root',
-    database: 'database_production',
-    host: '127.0.0.1',
-    port: 15432,
-    dialect: 'postgres'
   }
 } as IConfig;
 export default config;

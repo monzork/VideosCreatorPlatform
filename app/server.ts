@@ -4,7 +4,7 @@ import logger from './logger';
 import swaggerUi from 'swagger-ui-express';
 import bodyParser = require('body-parser');
 
-import cors from 'cors';
+import cors, { CorsOptions } from 'cors';
 import morgan from 'morgan';
 import environment from './config/environment';
 
@@ -43,6 +43,18 @@ export class Server {
         extended: true
       })
     );
+
+    const allowedOrigins: string[] = ['http://localhost:5000'];
+
+    const options: CorsOptions = {
+      origin: (origin, callback) => {
+        if (allowedOrigins.indexOf(origin || '') !== -1) {
+          callback(null, true);
+        }
+      }
+    };
+
+    this.app.use(cors(options));
 
     this.app.use(bodyParser.json());
 

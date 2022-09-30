@@ -29,5 +29,7 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
       - DB_NAME=${DB_NAME}
+      - SECRET=${SECRET}
+      - SALT=${SALT}
     ports:
       - ${PORT}:5000
