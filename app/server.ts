@@ -43,19 +43,6 @@ export class Server {
         extended: true
       })
     );
-
-    const allowedOrigins: string[] = ['http://localhost:5000'];
-
-    const options: CorsOptions = {
-      origin: (origin, callback) => {
-        if (allowedOrigins.indexOf(origin || '') !== -1) {
-          callback(null, true);
-        }
-      }
-    };
-
-    this.app.use(cors(options));
-
     this.app.use(bodyParser.json());
 
     RegisterRoutes(this.app);

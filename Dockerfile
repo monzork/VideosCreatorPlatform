@@ -20,7 +20,7 @@ COPY package*.json ./
 
 RUN npm install --omit=dev
 
-COPY --from=0 /usr/dist ./
+COPY --from=0 /usr/dist .
 
 RUN npm install pm2 -g
 
