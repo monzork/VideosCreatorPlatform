@@ -6,6 +6,8 @@ First, run
 
 ```bash
 npm install
+# or
+yarn install
 ```
 
 Rename env-sample to .env and assign values to variables
@@ -14,7 +16,7 @@ Rename env-sample to .env and assign values to variables
 For the database run
 
 ```bash
-docker-compose up -d
+docker-compose -f docker-compose-database.yml up -d
 ```
 
 Run the seeders with
